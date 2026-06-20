@@ -36,18 +36,29 @@
             item.classList.add("task-item");
             item.dataset.id = task.id;
 
-            item.innerHTML = `
-        <div class="text${task.completed ? ' completed' : ''}">${task.data}</div>
-        <button class="btn remove">
+            
+            const textDiv = document.createElement("div");
+            textDiv.classList.add("text");
+            if (task.completed) {
+                textDiv.classList.add("completed");
+            }
+            textDiv.textContent = task.data; 
+
+            // Create remove button
+            const removeBtn = document.createElement("button");
+            removeBtn.classList.add("btn", "remove");
+            removeBtn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323">
                 <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
             </svg>
-        </button>
-    `;
+            `;
 
-            item.querySelector('.remove').addEventListener('click', () => removeTask(task.id, item));
+            item.appendChild(textDiv);
+            item.appendChild(removeBtn);
+
+            removeBtn.addEventListener('click', () => removeTask(task.id, item));
             item.addEventListener('click', (e) => {
-                if (e.target !== item.querySelector('.remove') && !e.target.closest('.remove')) {
+                if (e.target !== removeBtn && !e.target.closest('.remove')) {
                     toggleComplete(task);
                 }
             });
